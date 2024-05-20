@@ -1,5 +1,6 @@
 from typing import Union
 import logging
+import json
 
 
 from fastapi import FastAPI
@@ -35,8 +36,8 @@ async def new_ticket_handler(req: Request):
 
     b = await req.json()
     print("============")
-    print(b)
-    logger.info(b)
+    print(json.dumps(b))
+    #logger.info(b)
     print("============")
 
     return "hello"
@@ -46,13 +47,13 @@ async def new_ticket_handler(req: Request):
 # https://environmental-ainsley-v3-engineering-655c7dc2.koyeb.app/webhooks/new_ticket
 
 """
-curl -X GET \
+curl -X POST \
   -H "Content-type: application/json" \
   -H "Accept: application/json" \
   -d '{"param0":"pradeep"}' \
   "127.0.0.1:8000/webhooks/new_ticket"
   
-curl -X GET \
+curl -X POST \
   -H "Content-type: application/json" \
   -H "Accept: application/json" \
   -d '{"param0":"pradeep"}' \
