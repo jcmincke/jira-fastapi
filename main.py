@@ -30,7 +30,7 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-@app.get("/webhooks/new_ticket")
+@app.post("/webhooks/new_ticket")
 async def new_ticket_handler(req: Request):
 
     b = await req.json()
