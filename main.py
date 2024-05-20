@@ -1,7 +1,22 @@
 from typing import Union
+import logging
+
 
 from fastapi import FastAPI
 from fastapi import (FastAPI, Depends, Request, HTTPException, BackgroundTasks)
+
+
+logging.basicConfig(encoding='utf-8',
+                    level=logging.INFO,
+                    format='%(levelname)s-%(message)s'
+                    )
+
+logger = logging.getLogger("test")
+
+logger.setLevel(logging.INFO)
+
+logger.debug("START")
+logger.info("START")
 
 app = FastAPI()
 
@@ -21,6 +36,7 @@ async def new_ticket_handler(req: Request):
     b = await req.json()
     print("============")
     print(b)
+    logger.info(b)
     print("============")
 
     return "hello"
@@ -36,4 +52,9 @@ curl -X GET \
   -d '{"param0":"pradeep"}' \
   "127.0.0.1:8000/webhooks/new_ticket"
   
+curl -X GET \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"param0":"pradeep"}' \
+  "https://environmental-ainsley-v3-engineering-655c7dc2.koyeb.app/webhooks/new_ticket"
 """
