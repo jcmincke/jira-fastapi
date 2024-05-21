@@ -1,7 +1,10 @@
+
+
 from typing import Union
 import logging
 import json
-
+import hashlib
+import hmac
 
 from fastapi import FastAPI
 from fastapi import (FastAPI, Depends, Request, HTTPException, BackgroundTasks)
@@ -22,6 +25,32 @@ logger.info("START")
 app = FastAPI()
 
 
+def check_jira_signature(
+        secret: str="It's a Secret to Everybody",
+        payload: str="Hello World!",
+        given_signature: str="sha256=a4771c39fbe90f317c7824e83ddef3caae9cb3d976c214ace1f2937e133263c9"
+        ):
+
+    #secret = "It's a Secret to Everybody"
+    #payload = "Hello World!"
+    #given_signature = "sha256=a4771c39fbe90f317c7824e83ddef3caae9cb3d976c214ace1f2937e133263c9"
+
+    hash_object = hmac.new(
+        secret.encode("utf-8"),
+        msg=payload.encode("utf-8"),
+        digestmod=hashlib.sha256,
+    )
+    calculated_signature = "sha256=" + hash_object.hexdigest()
+
+    if not hmac.compare_digest(calculated_signature, given_signature):
+        print(
+            "Signatures do not match\nExpected signature:"
+            f" {calculated_signature}\nActual: signature: {given_signature}"
+        )
+    else:
+        print("Signatures match")
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
@@ -35,12 +64,34 @@ def read_item(item_id: int, q: Union[str, None] = None):
 async def new_ticket_handler(req: Request):
     signature = req.headers.get("X-Hub-Signature")
 
-    print("signature:", signature, ":ebd signature")
-    b = await req.json()
+
+    json_body = await req.json()
     print("============")
-    print(json.dumps(b))
+    print(json.dumps(json_body))
     #logger.info(b)
     print("============")
+
+    print("signature:", signature, ":ebd signature")
+
+    check_jira_signature(
+        secret="IP5CblG2j0niQwvNSMvU",
+        paylaod=json.dumps(b),
+        given_signature=signature
+        )
+
+    check_jira_signature(
+        secret="IP5CblG2j0niQwvNSMvU",
+        paylaod=json.dumps(json_body),
+        given_signature=signature
+        )
+
+    body = await req.body()
+
+    check_jira_signature(
+        secret="IP5CblG2j0niQwvNSMvU",
+        paylaod=body,
+        given_signature=signature
+        )
 
     return "hello"
 
