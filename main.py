@@ -81,13 +81,13 @@ async def new_ticket_handler(req: Request):
         given_signature=signature
         )
 
-    """"
+    '''
     check_jira_signature(
         secret="IP5CblG2j0niQwvNSMvU",
         payload=body,
         given_signature=signature
         )
-    """"
+    '''
     return "hello"
 
 
