@@ -33,7 +33,9 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/webhooks/new_ticket")
 async def new_ticket_handler(req: Request):
+    signature = request.headers.get("X-Hub-Signature")
 
+    print("signature:", signature, ":ebd signature")
     b = await req.json()
     print("============")
     print(json.dumps(b))
