@@ -65,6 +65,8 @@ async def new_ticket_handler(req: Request):
     signature = req.headers.get("X-Hub-Signature")
 
 
+    body = await req.body()
+    print("$$$$$$ bode=", body)
     json_body = await req.json()
     print("============")
     print(json.dumps(json_body))
@@ -75,15 +77,14 @@ async def new_ticket_handler(req: Request):
 
     check_jira_signature(
         secret="IP5CblG2j0niQwvNSMvU",
-        paylaod=json.dumps(json_body),
+        payload=json.dumps(json_body),
         given_signature=signature
         )
 
-    body = await req.body()
 
     check_jira_signature(
         secret="IP5CblG2j0niQwvNSMvU",
-        paylaod=body,
+        payload=body,
         given_signature=signature
         )
 
