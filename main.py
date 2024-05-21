@@ -63,7 +63,8 @@ def read_item(item_id: int, q: Union[str, None] = None):
 @app.post("/webhooks/new_ticket")
 async def new_ticket_handler(req: Request):
     signature = req.headers.get("X-Hub-Signature")
-
+    print(type(req.headers))
+    print(req.headers)
 
     body = await req.body()
     #print("$$$$$$ bode=", body)
@@ -76,14 +77,14 @@ async def new_ticket_handler(req: Request):
     print("signature:", signature, ":ebd signature")
 
     check_jira_signature(
-        secret="IP5CblG2j0niQwvNSMvU",
+        secret="mysecret",
         payload=json.dumps(json_body),
         given_signature=signature
         )
 
     '''
     check_jira_signature(
-        secret="IP5CblG2j0niQwvNSMvU",
+        secret="mysecret",
         payload=body,
         given_signature=signature
         )
