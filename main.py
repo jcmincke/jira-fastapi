@@ -1,12 +1,12 @@
 
 
-from typing import Union
+from typing import Union, Dict
 import logging
 import json
 import hashlib
 import hmac
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi import (FastAPI, Depends, Request, HTTPException, BackgroundTasks)
 
 
@@ -62,33 +62,37 @@ def read_item(item_id: int, q: Union[str, None] = None):
 
 @app.post("/webhooks/new_ticket")
 async def new_ticket_handler(req: Request):
+
+
     signature = req.headers.get("X-Hub-Signature")
     print(type(req.headers))
     print(req.headers)
 
-    body = await req.body()
-    #print("$$$$$$ bode=", body)
-    json_body = await req.json()
+    body_bytes = await req.body()
+    body = body_bytes.decode("utf-8")
+    #json_body = await req.json()
+
     print("============")
-    print(json.dumps(json_body))
-    #logger.info(b)
+    print(body)
+    print(type(body))
+    #print(json.dumps(json_body))
     print("============")
 
     print("signature:", signature, ":ebd signature")
 
+    '''    
     check_jira_signature(
         secret="mysecret",
         payload=json.dumps(json_body),
         given_signature=signature
         )
-
     '''
+
     check_jira_signature(
         secret="mysecret",
         payload=body,
         given_signature=signature
         )
-    '''
     return "hello"
 
 
