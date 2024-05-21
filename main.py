@@ -60,10 +60,10 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
-@app.post("/webhooks/new_ticket")
-async def new_ticket_handler(req: Request):
+@app.post("/webhooks/new_ticket/{issue_key}")
+async def new_ticket_handler(req: Request, issue_key:str):
 
-
+    print("issue key", issue_key)
     signature = req.headers.get("X-Hub-Signature")
     print(type(req.headers))
     print(req.headers)
