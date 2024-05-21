@@ -75,12 +75,6 @@ async def new_ticket_handler(req: Request):
 
     check_jira_signature(
         secret="IP5CblG2j0niQwvNSMvU",
-        paylaod=json.dumps(b),
-        given_signature=signature
-        )
-
-    check_jira_signature(
-        secret="IP5CblG2j0niQwvNSMvU",
         paylaod=json.dumps(json_body),
         given_signature=signature
         )
